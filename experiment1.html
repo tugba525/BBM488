@@ -1,0 +1,49 @@
+<html>
+<head>
+    <title>tugba</title>
+	<link type="text/css" rel="stylesheet" href="experiment1.css" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+	<script>
+	//verilen aralýkta(10000ms) fonksiyon kendini tetikler
+	var int=self.setInterval(function(){searchTwitter(params)},10000);
+	function searchTwitter(query) {
+    $.ajax({
+        url: 'http://search.twitter.com/search.json?' + jQuery.param(query),
+        dataType: 'jsonp',
+        success: function(data) {
+            var tweets = $('#tweets');
+            tweets.html('');
+            for (res in data['results']) {
+                <!--tweets.append('<div><img id="profil" src="' + data['results'][res].profile_image_url + '">' + '<div><text id="text" src"' + '<b>'+ data['results'][res].from_user_name  + '</b> '  + data['results'][res].from_user  + '(' + data['results'][res].created_at  + ')' + ' wrote: <p>' + data['results'][res].text +'">'+ '</p></div><br />');-->
+				tweets.append('<div><img id="profil" align="left" src="' + data['results'][res].profile_image_url + '">' + '<b>'+ data['results'][res].from_user_name  + '</b> '  + data['results'][res].from_user  + '(' + data['results'][res].created_at  + ')' + ' wrote: <br />' + data['results'][res].text + '</div><br />');
+                
+			}
+        }
+    });
+}
+
+$(document).ready(function() {
+    $('#submit').click(function() {
+	//parametre degiskeninin basýna bisey yazmayýnca global oldu
+        params = {
+            q: $('#query').val(),
+            rpp: 5
+        };
+        searchTwitter(params);
+    });
+});
+    </script>
+</head>
+<body>
+    <div id="left">
+		<img id="foto" src="resimler/foto.png" />
+        <input id="query" type="text" value=" " />
+        <input id="submit" type="button" value="Search" />
+		
+    </div>
+    <div id="tweets" <!--style="padding: 20px;"-->
+      <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Tweets will go here.<b/> 
+    </div>
+	
+</body>
+</html>
